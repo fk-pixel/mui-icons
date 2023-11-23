@@ -23,7 +23,7 @@ export default function Home() {
   const [data, setData] = useState<DataProps>();
 
   useEffect(() => {
-    fetch(`/api/icons/50`)
+    fetch(`/api/icons/100`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
