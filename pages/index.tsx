@@ -12,11 +12,11 @@ import IconDetail from './api/icons/[id]';
 import { useEffect, useState } from 'react';
 
 interface DataProps {
-  id: string;
-  name: string;
-  icon: string;
-  variant: string;
-  category: string;
+  id?: string;
+  name?: string;
+  icon?: string;
+  variant?: string;
+  category?: string;
 }
 
 export default function Home({
