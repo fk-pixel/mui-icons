@@ -78,7 +78,7 @@ export default function Home({
           <strong>icon_variant:</strong> {data.variant}
         </div>
         <div key={'img-div'}>
-          <strong>icon_icon:</strong> <SVG src={data.icon} />
+          <strong>icon_icon:</strong> <SVG src={data?.icon} />
         </div>
         {/* <div key={'img-div'}>{json_encode(data.icon)}</div> */}
         {/* <div>{icons.find((x) => x.id === id).icon}</div> */}
