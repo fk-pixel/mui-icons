@@ -23,7 +23,7 @@ interface Icon {
   category: string;
 }
 
-export const iconStoragePath = join(process.cwd(), '../mui-icons/data/icon');
+export const iconStoragePath = join(process.cwd(), 'data/icon');
 export const IconCategories = readdirSync(iconStoragePath);
 export const Icons: {
   [id: string]: Icon;
