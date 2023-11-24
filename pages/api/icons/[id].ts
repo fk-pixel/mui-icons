@@ -1,9 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { icons } from '../../../data/icons';
+// import { icons } from '../../../data/icons';
+import { findAll } from '../test/icons';
 
 const IconDetail = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const iconId = req.query.id as string;
+    const icons = await findAll({});
 
     // const icon = await db.getById(iconId);
     const icon = icons.find((x) => String(x.id) === iconId);

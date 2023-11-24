@@ -12,7 +12,7 @@ import IconDetail from './api/icons/[id]';
 import { useEffect, useState } from 'react';
 
 interface DataProps {
-  id?: string;
+  id: string;
   name?: string;
   icon?: string;
   variant?: string;
@@ -23,7 +23,7 @@ export default function Home() {
   const [data, setData] = useState<DataProps>();
 
   useEffect(() => {
-    fetch(`/api/icons/100`)
+    fetch(`/api/icons/action__accessible__standard`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -72,7 +72,7 @@ export default function Home() {
         <div key={'img-icon'}>
           <strong>icon_icon:</strong>
           <>
-            <SVG key={'icon'} src={data.icon !== undefined ? data.icon : ''} />
+            <SVG key={'icon'} src={data.icon !== undefined ? data.id : ''} />
           </>
         </div>
       </section>
