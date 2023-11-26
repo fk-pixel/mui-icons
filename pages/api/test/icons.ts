@@ -3,9 +3,10 @@
 // all icons:
 // localhost:3000/api/icons
 
-import { readdirSync } from 'fs';
+import { createReadStream, existsSync, readdirSync, readFile, readFileSync, statSync } from 'fs';
 import { ObjectId } from 'mongodb';
 import { join } from 'path';
+import { promisify } from 'util';
 
 export type QueryHelperFilter = {
   [key: string]: string | RegExp | ObjectId | { $in: ObjectId[] } | QueryHelperFilter[];
@@ -34,20 +35,77 @@ export const Icons: {
 
 export let IconMaxLength = 10;
 
+const asyncReadFile = promisify(readFile);
+
+const returnSvg = async (path: string) => {
+  const data = await asyncReadFile(path);
+
+  // since fs.readFile returns a buffer, we should probably convert it to a string.
+  return data.toString();
+};
+
+console.log('ex.', returnSvg('mui-icons/data/icons/action/123/materialicons'));
+
 IconCategories.forEach((category) => {
-  readdirSync(join(iconStoragePath, category)).forEach((icon) => {
-    readdirSync(join(iconStoragePath, category, icon)).forEach((v) => {
+  readdirSync(join(iconStoragePath, category)).forEach((iconName) => {
+    readdirSync(join(iconStoragePath, category, iconName)).forEach((v) => {
       const variant = v.replace('materialicons', '') || 'standard';
-      const id = `${category}__${icon}__${variant}`;
+      const id = `${category}__${iconName}__${variant}`;
 
       if (IconMaxLength < id.length) {
         IconMaxLength = id.length + 1;
       }
 
+      // const t = statSync(join(iconStoragePath, category, iconName, v)).isFile()
+      //   ? JSON.parse(readFileSync(v, 'utf8'))
+      //   : '';
+
+      const a = existsSync(join(iconStoragePath, category, iconName, v));
+
+      // const SVGFile = readFile(
+      //   join(iconStoragePath, category, iconName, v),
+      //   { encoding: 'utf-8' },
+      //   (err, data) => {
+      //     // if (err) {
+      //     //   console.log(err);
+      //     // }s
+      //     // if (data?.length > 1) {
+      //     //   return data[1];
+      //     // }
+      //     // return data;
+      //     if (!err) {
+      //       console.log('received data: ' + `${data}`);
+      //       //response.writeHead(200, { 'Content-Type': 'text/html' });
+      //       //response.write(data);
+      //       //response.end();
+      //     } else {
+      //       console.log(err);
+      //     }
+      //   },
+      // );
+
+      //console.log('SVG', SVGFile);
+      const fileName = join(iconStoragePath, category, iconName, v);
+      const file = createReadStream(fileName, 'utf8');
+
+      // file.on('error', (err) => {
+      //   console.log('Error message: ', err);
+      // });
+
+      // file.on('data', (chunk) => {
+      //   console.log('chunk', chunk);
+      // });
+
+      const iconData = returnSvg(fileName).toString();
+
+      //saveAs(new Blob([file], { type: 'image/svg+xml' }), 'name.svg');
+
+      //return new StreamableFile(file);
+
       Icons[id] = {
         id: id,
-        name: icon.replace(/_/g, ' '),
-        icon,
+        name: iconName.replace(/_/g, ' '),
+        icon: iconData, //file, //a ? 'true' : 'false', //JSON.parse(readFileSync(v, 'utf8')), //JSON.parse(readFileSync(join(iconStoragePath, category, iconName, v), 'utf8')),
         variant,
         category,
       };
